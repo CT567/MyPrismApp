@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="PrismDemo.Views.MotionDebugView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 卡号选择和初始化区域 -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="卡号：" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <ComboBox Width="100" ItemsSource="{Binding CardIds}" SelectedItem="{Binding SelectedCardId}"/>
+            <Button Content="初始化卡" Command="{Binding InitCardCommand}" Margin="10,0"/>
+            <Button Content="热复位" Command="{Binding HotResetCommand}" Margin="5,0"/>
+            <Button Content="冷复位" Command="{Binding CoolResetCommand}" Margin="5,0"/>
+            <TextBlock Text="{Binding CardStatus}" Margin="20,0" Foreground="Green"/>
+        </StackPanel>
+
+        <!-- 平台和配置文件区域 -->
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,0,0,10">
+            <TextBlock Text="平台选择：" VerticalAlignment="Center" Margin="0,0,5,0"/>
+            <ComboBox Width="150" ItemsSource="{Binding Platforms}" SelectedItem="{Binding SelectedPlatform}"/>
+
+            <TextBlock Text="配置文件：" VerticalAlignment="Center" Margin="20,0,5,0"/>
+
+            <Button Content="使能所有轴" Command="{Binding EnableAllAxesCommand}" Margin="20,0"/>
+        </StackPanel>
+
+        <!-- 参数表 + 单轴控制面板 -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- 轴参数表格 -->
+            <DataGrid Grid.Column="0"
+                      ItemsSource="{Binding Axes}"
+                      SelectedItem="{Binding SelectedAxis}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="轴名" Binding="{Binding Name}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="卡号" Binding="{Binding CardID}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="轴号" Binding="{Binding AxisID}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="当前位置" Binding="{Binding CurrentPosition}" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="目标位置" Binding="{Binding TargetPosition, Mode=TwoWay}"/>
+                    <DataGridTextColumn Header="速度" Binding="{Binding MaxSpeed, Mode=TwoWay}"/>
+                    <DataGridTextColumn Header="加速度" Binding="{Binding AccTime, Mode=TwoWay}"/>
+                    <DataGridCheckBoxColumn Header="使能" Binding="{Binding IsEnabled}" IsReadOnly="True"/>
+                    <DataGridCheckBoxColumn Header="已回零" Binding="{Binding IsHomed}" IsReadOnly="True"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- 单轴控制面板 -->
+            <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                <TextBlock Text="单轴控制" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <!-- 状态显示区 -->
+                <StackPanel Background="#F0F0F0" Margin="0,0,0,10">
+                    <TextBlock Text="当前状态："/>
+                    <TextBlock Text="{Binding AxisStatus}" Foreground="Blue"/>
+                    <TextBlock Text="限位状态："/>
+                    <TextBlock Text="{Binding LimitStatus}"/>
+                </StackPanel>
+
+                <!-- 运动控制按钮 -->
+                <Button Content="Jog-" Command="{Binding JogNegativeCommand}" Margin="0,5"/>
+                <Button Content="Jog+" Command="{Binding JogPositiveCommand}" Margin="0,5"/>
+                <Button Content="回零" Command="{Binding HomeCommand}" Margin="0,5"/>
+                <Button Content="清零" Command="{Binding ClearPosCommand}" Margin="0,5"/>
+                <Button Content="急停" Command="{Binding EmgStopCommand}" Margin="0,5"/>
+                <Button Content="使能/禁用" Command="{Binding EnableAxisCommand}" Margin="0,5"/>
+
+                <!-- 定位控制 -->
+                <Separator Margin="0,10"/>
+                <Button Content="相对移动" Command="{Binding RelativeMoveCommand}" Margin="0,5"/>
+                <Button Content="绝对移动" Command="{Binding AbsoluteMoveCommand}" Margin="0,5"/>
+                <Button Content="停止" Command="{Binding DecStopCommand}" Margin="0,5"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- 系统日志区域 -->
+        <StackPanel Grid.Row="3" Margin="0,10,0,0">
+            <TextBlock Text="执行消息" FontWeight="Bold"/>
+            <ListBox ItemsSource="{Binding LogMessages}" Height="100" Margin="0,5"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

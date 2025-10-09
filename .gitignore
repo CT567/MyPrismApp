@@ -1,0 +1,24 @@
+# Build output
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+
+# Visual Studio
+.vs/
+*.dbmdl
+*.pdb
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# Packages
+packages/
+*.nupkg
+
+# Others
+~$*
+*.tmp
