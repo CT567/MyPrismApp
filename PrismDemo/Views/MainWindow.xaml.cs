@@ -9,7 +9,7 @@ namespace PrismDemo.Views
         {
             InitializeComponent();
 
-            this.DataContext = vm; //绑定 ViewModel
+            //this.DataContext = vm; //绑定 ViewModel
         }
     }
 }
